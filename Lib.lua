@@ -3246,6 +3246,12 @@ function UILibrary.new(gameName, userId, rank)
     local window = objectGenerator.new("Window")
     window.Parent = GUI
 
+    game.Players.LocalPlayer:GetMouse().KeyDown:Connect(function(K)
+		if K == "l" then
+			window.Visible = not window.Visible
+		end
+	end)
+
     --// make UI draggable
     -->> LogoHitbox
 
