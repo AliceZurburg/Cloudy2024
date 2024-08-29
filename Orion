@@ -52,7 +52,7 @@ if syn then
 	syn.protect_gui(Orion)
 	Orion.Parent = game.CoreGui
 else
-	Orion.Parent = gethui() or game.CoreGui
+	Orion.Parent = game.Players.LocalPlayer.PlayerGui
 end
 
 if gethui then
@@ -62,7 +62,7 @@ if gethui then
 		end
 	end
 else
-	for _, Interface in ipairs(game.CoreGui:GetChildren()) do
+	for _, Interface in ipairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do
 		if Interface.Name == Orion.Name and Interface ~= Orion then
 			Interface:Destroy()
 		end
@@ -73,7 +73,7 @@ function OrionLib:IsRunning()
 	if gethui then
 		return Orion.Parent == gethui()
 	else
-		return Orion.Parent == game:GetService("CoreGui")
+		return Orion.Parent == game.Players.LocalPlayer.PlayerGui
 	end
 
 end
