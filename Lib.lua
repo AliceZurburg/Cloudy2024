@@ -3555,6 +3555,46 @@ function Library:label(options)
 	return methods
 end
 
+local CBar, CRemote, Connected = plr['PlayerGui']:WaitForChild('Chat')['Frame'].ChatBarParentFrame['Frame'].BoxFrame['Frame'].ChatBar, game:GetService('ReplicatedStorage').DefaultChatSystemChatEvents['SayMessageRequest'], {}
+
+local HookChat = function(Bar)
+    coroutine.wrap(function()
+        if not table.find(Connected, Bar) then
+            local Connect = Bar['FocusLost']:Connect(function(Enter)
+                if Enter ~= false and Bar['Text'] ~= '' then
+                    local Message = Bar['Text']
+                    Bar['Text'] = '';
+                    if Message == "/toggle" then
+                        Library:show(self.Toggled)
+                    else
+                        CRemote:FireServer(Message, 'All')
+                    end
+                end
+            end)
+            Connected[#Connected + 1] = Bar; Bar['AncestryChanged']:Wait(); Connect:Disconnect()
+        end
+    end)()
+end
+
+HookChat(CBar); local BindHook = Instance.new('BindableEvent')
+
+local MT = getrawmetatable(game); local NC = MT.__namecall; setreadonly(MT, false)
+
+MT.__namecall = newcclosure(function(...)
+    local Method, Args = getnamecallmethod(), { ... }
+    if rawequal(tostring(Args[1]), 'ChatBarFocusChanged') and rawequal(Args[2], true) then
+        if plr['PlayerGui']:FindFirstChild('Chat') then
+            BindHook:Fire()
+        end
+    end
+    return NC(...)
+end)
+
+BindHook['Event']:Connect(function()
+    CBar = plr['PlayerGui'].Chat['Frame'].ChatBarParentFrame['Frame'].BoxFrame['Frame'].ChatBar
+    HookChat(CBar)
+end)
+
 return setmetatable(Library, {
 	__index = function(_, i)
 		return rawget(Library, i:lower())
