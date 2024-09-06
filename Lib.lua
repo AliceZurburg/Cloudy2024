@@ -3555,7 +3555,7 @@ function Library:label(options)
 	return methods
 end
 
-local CBar, CRemote, Connected = plr['PlayerGui']:WaitForChild('Chat')['Frame'].ChatBarParentFrame['Frame'].BoxFrame['Frame'].ChatBar, game:GetService('ReplicatedStorage').DefaultChatSystemChatEvents['SayMessageRequest'], {}
+local CBar, CRemote, Connected = game.Players.LocalPlayer['PlayerGui']:WaitForChild('Chat')['Frame'].ChatBarParentFrame['Frame'].BoxFrame['Frame'].ChatBar, game:GetService('ReplicatedStorage').DefaultChatSystemChatEvents['SayMessageRequest'], {}
 
 local HookChat = function(Bar)
     coroutine.wrap(function()
@@ -3583,7 +3583,7 @@ local MT = getrawmetatable(game); local NC = MT.__namecall; setreadonly(MT, fals
 MT.__namecall = newcclosure(function(...)
     local Method, Args = getnamecallmethod(), { ... }
     if rawequal(tostring(Args[1]), 'ChatBarFocusChanged') and rawequal(Args[2], true) then
-        if plr['PlayerGui']:FindFirstChild('Chat') then
+        if game.Players.LocalPlayer['PlayerGui']:FindFirstChild('Chat') then
             BindHook:Fire()
         end
     end
@@ -3591,7 +3591,7 @@ MT.__namecall = newcclosure(function(...)
 end)
 
 BindHook['Event']:Connect(function()
-    CBar = plr['PlayerGui'].Chat['Frame'].ChatBarParentFrame['Frame'].BoxFrame['Frame'].ChatBar
+    CBar = game.Players.LocalPlayer['PlayerGui'].Chat['Frame'].ChatBarParentFrame['Frame'].BoxFrame['Frame'].ChatBar
     HookChat(CBar)
 end)
 
